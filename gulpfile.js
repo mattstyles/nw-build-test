@@ -202,9 +202,9 @@ gulp.task( 'package', [ 'clean-build' ], function( done ) {
         return new Promise( function( resolve, reject ) {
             shell.mkdir( '-p', './prod/node_modules' );
             shell.cp( '-r', './dist', './prod/' );
-            // deps.forEach( function( dep ) {
-            //     shell.cp( '-r', path.join( './node_modules/', dep ), './prod/node_modules/' );
-            // });
+            deps.forEach( function( dep ) {
+                shell.cp( '-r', path.join( './node_modules/', dep ), './prod/node_modules/' );
+            });
             shell.cp( 'index.html', './prod' );
             shell.cp( 'package.json', './prod' );
             resolve();

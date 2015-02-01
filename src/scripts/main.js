@@ -1,5 +1,5 @@
 
-console.log( 'main.js loaded' );
+console.log( 'main.js loaded ' + new Date );
 
 var fs = nequire( 'graceful-fs' );
 var pkg = JSON.parse( fs.readFileSync( './package.json' ) );
@@ -10,7 +10,7 @@ var win = gui.Window.get();
 import CloseButton from './close';
 var close = new CloseButton();
 close.on( 'close', function() {
-    console.log( 'close me please' );
+    console.log( 'window closing' + new Date );
     win.close();
 });
 
