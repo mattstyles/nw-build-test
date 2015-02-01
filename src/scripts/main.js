@@ -1,8 +1,8 @@
 
 console.log( 'main.js loaded' );
 
-// var fs = nequire( 'graceful-fs' );
-// var pkg = JSON.parse( fs.readFileSync( './package.json' ) );
+var fs = nequire( 'graceful-fs' );
+var pkg = JSON.parse( fs.readFileSync( './package.json' ) );
 
 var gui = nequire( 'nw.gui' );
 var win = gui.Window.get();

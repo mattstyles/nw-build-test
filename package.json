@@ -36,7 +36,7 @@
     "gulp-uglify": "^1.1.0",
     "gulp-util": "^3.0.2",
     "minimist": "^1.1.0",
-    "node-webkit-builder": "^1.0.8",
+    "node-webkit-builder": "git://github.com/mattstyles/node-webkit-builder#master",
     "shelljs": "^0.3.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
