@@ -1,6 +1,8 @@
 .DS_Store
 npm-debug.log
 dist
+build
+prod
+cache
 node_modules
 src/vendor
-

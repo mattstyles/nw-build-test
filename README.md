@@ -11,3 +11,10 @@ npm i -g nw
 gulp (or gulp -d)
 nw
 ```
+
+Also trying to get a build working with node-webkit-builder, currently seems broken
+
+```
+gulp build
+gulp package
+```

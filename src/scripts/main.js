@@ -1,8 +1,8 @@
 
 console.log( 'main.js loaded' );
 
-var fs = nequire( 'graceful-fs' );
-var pkg = JSON.parse( fs.readFileSync( './package.json' ) );
+// var fs = nequire( 'graceful-fs' );
+// var pkg = JSON.parse( fs.readFileSync( './package.json' ) );
 
 var gui = nequire( 'nw.gui' );
 var win = gui.Window.get();
@@ -26,4 +26,6 @@ Log.prototype.log = function() {
 var log = new Log( document.getElementById( 'main' ) );
 
 log.log( 'hello world' );
-log.log( pkg.name, pkg.version );
+if ( pkg ) {
+    log.log( pkg.name, pkg.version );
+}

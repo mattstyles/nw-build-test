@@ -12,7 +12,12 @@
  *   dev/debug builds
  */
 
+var fs          = require( 'fs' );
+var path        = require( 'path' );
+
 var args        = require( 'minimist' )( process.argv.slice( 2 ) );
+var shell       = require( 'shelljs' );
+var NwBuilder   = require( 'node-webkit-builder' );
 
 var gulp        = require( 'gulp' );
 var $           = require( 'gulp-load-plugins' )();
@@ -47,6 +52,12 @@ gulp.task( 'clean', function( done ) {
     ], done );
 });
 
+gulp.task( 'clean-build', function( done ) {
+    del([
+        'prod',
+        'build'
+    ], done );
+});
 
 /**
 * Copies over static assets
@@ -169,6 +180,65 @@ gulp.task( 'polyfill', function() {
         .pipe( $.livereload({
             auto: false
         }));
+});
+
+
+gulp.task( 'package', [ 'clean-build' ], function( done ) {
+    function get( filename ) {
+        return new Promise( function( resolve, reject ) {
+            fs.readFile( filename, { encoding: 'utf8' }, function( err, contents ) {
+                if ( err ) {
+                    reject( err );
+                    return;
+                }
+                resolve( path.extname( filename, '.json' )
+                    ? JSON.parse( contents )
+                    : contents );
+            });
+        });
+    }
+
+    function prep( deps ) {
+        return new Promise( function( resolve, reject ) {
+            shell.mkdir( '-p', './prod/node_modules' );
+            shell.cp( '-r', './dist', './prod/' );
+            // deps.forEach( function( dep ) {
+            //     shell.cp( '-r', path.join( './node_modules/', dep ), './prod/node_modules/' );
+            // });
+            shell.cp( 'index.html', './prod' );
+            shell.cp( 'package.json', './prod' );
+            resolve();
+        });
+    }
+
+    function nwbuild() {
+        var nw = new NwBuilder({
+            files: './prod/**/**',
+            platforms: [ 'osx64' ]
+        });
+
+        nw.on( 'log', $.util.log );
+
+        nw.build()
+            .then( function() {
+                $.util.log( 'nw build',  $.util.colors.green( '✔︎' ) );
+            })
+            .catch( function( err ) {
+                $.util.log( 'nw build',  $.util.colors.red( '✗' ) );
+                throw new Error( 'NwBuilder error: ' + err );
+            });
+    }
+
+    get( 'package.json' )
+        .then( function( pkg ) {
+            return Object.keys( pkg.dependencies );
+        })
+        .then( prep )
+        .then( nwbuild )
+        .then( done )
+        .catch( function( err ) {
+            console.log( 'Error retrieving package.json', err );
+        });
 });
 
 
